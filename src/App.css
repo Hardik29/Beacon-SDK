@@ -34,4 +34,18 @@ button img{
 .connect{
   margin-top: 10rem;
 }
+.clear:hover{
+  color: white;
+  border-color: aliceblue;
+  background-color: #027ad6;
+}
+.connect:hover {
+  color: white;
+  border-color: aliceblue;
+  background-color: #027ad6;
+}
+.connected:disabled{
+  margin-top: 10rem;
+  opacity: 0.5;
+}
 

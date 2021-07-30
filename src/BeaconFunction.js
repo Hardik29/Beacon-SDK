@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DAppClient, NetworkType } from "@airgap/beacon-sdk";
+import { DAppClient, NetworkType, SigningType } from "@airgap/beacon-sdk";
 
 function BeaconFunction() {
   const [state, setstate] = useState(false);
@@ -12,6 +12,7 @@ function BeaconFunction() {
   const dAppClient = new DAppClient(options);
 
   async function loadEdit() {
+    console.log(dAppClient);
     const activeAccount = await dAppClient.getActiveAccount();
     if (activeAccount) {
       console.log(activeAccount);
@@ -20,24 +21,43 @@ function BeaconFunction() {
     } else {
       const permissions = await dAppClient
         .requestPermissions()
-        .then(permissions => {
-          console.log("New connection:", permissions.address);
+        .then((permissions) => {
+          const response = dAppClient
+            .requestSignPayload({
+              signingType: SigningType.RAW,
+              payload: "Hiii vhfghh",
+            })
+            .then((response) => {
+              console.log(`Signature: ${response.signature}`);
+              console.log("New connection:", permissions.address);
+              setstate(true);
+            })
+            .catch((err) => {
+              console.log(err);
+              console.log("New connection:", permissions.address);
+              setstate(true);
+            })
+            
         })
         .catch((err) => {
           console.log(err);
         });
-        console.log(permissions );
+      console.log(permissions);
     }
   }
-  function load() {
-    dAppClient.clearActiveAccount();
+  async function load() {
+    await dAppClient.clearActiveAccount();
     setstate(false);
   }
 
   return (
     <div className="App">
       <div>
-        <button onClick={loadEdit} className="connect" disabled={state}>
+        <button
+          onClick={loadEdit}
+          className={`${state ? "connected" : "connect "}`}
+          disabled={state}
+        >
           {state ? " Connected" : "Connect with tezos wallet"}
         </button>
       </div>
