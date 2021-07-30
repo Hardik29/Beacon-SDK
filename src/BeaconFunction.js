@@ -12,37 +12,34 @@ function BeaconFunction() {
   const dAppClient = new DAppClient(options);
 
   async function loadEdit() {
-    console.log(dAppClient);
+    console.log(dAppClient)
     const activeAccount = await dAppClient.getActiveAccount();
     if (activeAccount) {
       console.log(activeAccount);
       console.log("Already connected:", activeAccount.address);
       setstate(true);
     } else {
-      const permissions = await dAppClient
-        .requestPermissions()
-        .then((permissions) => {
-          const response = dAppClient
-            .requestSignPayload({
-              signingType: SigningType.RAW,
-              payload: "Hiii vhfghh",
-            })
-            .then((response) => {
-              console.log(`Signature: ${response.signature}`);
-              console.log("New connection:", permissions.address);
-              setstate(true);
-            })
-            .catch((err) => {
-              console.log(err);
-              console.log("New connection:", permissions.address);
-              setstate(true);
-            })
-            
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      console.log(permissions);
+      
+      try {
+        const permissions = await dAppClient.requestPermissions();
+        console.log(permissions)
+        try {
+          const response = await dAppClient.requestSignPayload({
+            signingType: SigningType.RAW,
+            payload: "Hiii vhfghh",
+          });
+          console.log(`Signature: ${response.signature}`);
+         } 
+         catch (error) {
+          console.log(error);
+        }
+        finally{
+          console.log("New connection:", permissions.address);
+          setstate(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   async function load() {
