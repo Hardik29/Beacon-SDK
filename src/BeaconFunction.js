@@ -12,10 +12,8 @@ function BeaconFunction() {
   const dAppClient = new DAppClient(options);
 
   async function loadEdit() {
-    console.log(dAppClient)
     const activeAccount = await dAppClient.getActiveAccount();
     if (activeAccount) {
-      console.log(activeAccount);
       console.log("Already connected:", activeAccount.address);
       setstate(true);
     } else {
@@ -26,7 +24,7 @@ function BeaconFunction() {
         try {
           const response = await dAppClient.requestSignPayload({
             signingType: SigningType.RAW,
-            payload: "Hiii vhfghh",
+            payload: "Hiii",
           });
           console.log(`Signature: ${response.signature}`);
          } 
